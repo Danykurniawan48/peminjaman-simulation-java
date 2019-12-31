@@ -14,10 +14,14 @@ import java.util.Scanner;
 
 public class Peminjaman 
 {
-   // Daftar barang yang ditampilkan
-   public static String barang[] = {"Buku", "Bolpoin", "Pensil", "Spidol", "Rautan", "Komik"}; 
-   // Daftar stok barang
-   public static int stokBarang[] = {10, 5, 6, 8, 10, 9};
+   public static String[][] dataBarang = { // masukan nama barang dan stok 
+      {"Buku", "10"},
+      {"Bolpoin", "5"},
+      {"Pensil", "6"},
+      {"Spidol", "8"},
+      {"Rautan", "10"},
+      {"Komik", "9"},
+   };
    
    // Daftar peminjaman barang, maksimal 10 dan bisa diubah
    public static String peminjamanBarang[] = new String[10];
@@ -185,8 +189,8 @@ public class Peminjaman
       System.out.println("|NO|\tBarang\t\t  |Stok|");
       System.out.println("-------------------------------");
 
-      for (int i = 0; i < barang.length; i++) {
-         System.out.println((i + 1) + ".\t" + barang[i] + "\t\t   " + stokBarang[i]);
+      for (int i = 0; i < dataBarang.length; i++) {
+         System.out.println((i + 1) + ".\t" + dataBarang[i][0] + "\t\t   " + dataBarang[i][1]);
       }
    }
    
@@ -194,13 +198,13 @@ public class Peminjaman
    {
       boolean status = false; // status pencarian barang, jika ketemu statusnya = TRUE, jika tidak maka statusnya = FALSE
       
-      for (int i = 0; i < barang.length; i++) {
-         if (barang[i].equalsIgnoreCase(namaBarang)) { // Jika barang yang terdapat di array sesuai dengan inputan yang diinputkan
+      for (int i = 0; i < dataBarang.length; i++) {
+         if (dataBarang[i][0].equalsIgnoreCase(namaBarang)) { // Jika barang yang terdapat di array sesuai dengan inputan yang diinputkan
             
             System.out.println("-------------------------------");
             System.out.println("|NO|\tBarang\t\t  |Stok|");
             System.out.println("-------------------------------");
-            System.out.println((i + 1) + ".\t" + barang[i] + "\t\t   " + stokBarang[i]);
+            System.out.println((i + 1) + ".\t" + dataBarang[i][0] + "\t\t   " + dataBarang[i][1]);
 
             status = true;
             break;
@@ -214,13 +218,15 @@ public class Peminjaman
    
    public static void peminjamanBarang(String namaBarang, int jumlahStok, int jumlahHari) // method/fungsi yang berfungsi untuk menyimpan data peminjaman barang
    {
+      int kurangStok;
       peminjamanBarang[indexPeminjamanBarang] = namaBarang;
       jumlahPeminjamanBarang[indexPeminjamanBarang] = jumlahStok;
       jumlahHariPeminjamanBarang[indexPeminjamanBarang] = jumlahHari;
       
-      for (int i = 0; i < barang.length; i++) {
-         if (barang[i].equalsIgnoreCase(namaBarang)) { // mencari barang yang dituju
-            stokBarang[i] = stokBarang[i] - jumlahStok; // mengurangi stok pada barang
+      for (int i = 0; i < dataBarang.length; i++) {
+         if (dataBarang[i][0].equalsIgnoreCase(namaBarang)) { // mencari barang yang dituju
+            kurangStok = Integer.valueOf(dataBarang[i][1]) - jumlahStok; // mengurangi stok pada barang
+            dataBarang[i][1] = String.valueOf(kurangStok); 
             break;
          }
       }
@@ -246,12 +252,15 @@ public class Peminjaman
    
    public static void pengembalianBarang(String namaBarang, int jumlahStok) // method/fungsi yang berfungsi untuk menyimpan data pengembalian barang
    {
+      int stokPengembalian;
       pengembalianBarang[indexPengembalianBarang] = namaBarang;
       jumlahPengembalianBarang[indexPengembalianBarang] = jumlahStok;
       
       for (int i = 0; i < indexPeminjamanBarang; i++) {
          if (pengembalianBarang[i].equalsIgnoreCase(namaBarang)) { // mencari barang yang dituju
-            stokBarang[i] = stokBarang[i] + jumlahStok; // menambah/mengembalikan stok pada barang
+            stokPengembalian = Integer.valueOf(dataBarang[i][1]) + jumlahStok; // menambah/mengembalikan stok pada barang
+            dataBarang[i][1] = String.valueOf(stokPengembalian); // menambah jumlah stok pada master data
+            
             jumlahPeminjamanBarang[i] = jumlahPeminjamanBarang[i] - jumlahStok; // mengurangi jumlah peminjaman barang
             break;
          }
